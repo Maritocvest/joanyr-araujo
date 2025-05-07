@@ -1,0 +1,162 @@
+
+import { Phone, Mail, MapPin } from 'lucide-react';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+
+const Contact = () => {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+    toast({
+      title: "Mensagem enviada!",
+      description: "Entraremos em contato em breve.",
+    });
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      message: ''
+    });
+  };
+
+  return (
+    <section id="contato" className="py-20 bg-gray-50">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">ENTRE EM CONTATO</h2>
+          <div className="w-24 h-1 bg-secondary mx-auto mb-6"></div>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Estamos prontos para ajudar você a garantir seus direitos previdenciários. Preencha o formulário abaixo e entraremos em contato o mais breve possível.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div>
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg">
+              <div className="mb-6">
+                <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Nome Completo</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+                  required
+                />
+              </div>
+              <div className="mb-6">
+                <label htmlFor="email" className="block text-gray-700 font-medium mb-2">E-mail</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+                  required
+                />
+              </div>
+              <div className="mb-6">
+                <label htmlFor="phone" className="block text-gray-700 font-medium mb-2">Telefone/WhatsApp</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+                  required
+                />
+              </div>
+              <div className="mb-6">
+                <label htmlFor="message" className="block text-gray-700 font-medium mb-2">Mensagem</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" className="w-full btn-primary">Enviar Mensagem</button>
+            </form>
+          </div>
+
+          <div className="flex flex-col justify-between">
+            <div className="bg-white p-8 rounded-lg shadow-lg mb-8">
+              <h3 className="text-2xl font-bold text-primary mb-6">Informações de Contato</h3>
+              
+              <div className="space-y-6">
+                <div className="flex items-start">
+                  <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
+                    <MapPin className="w-6 h-6 text-secondary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-1">Endereço</h4>
+                    <p className="text-gray-600">Palmas - TO, 77000-0000</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
+                    <Phone className="w-6 h-6 text-secondary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-1">WhatsApp</h4>
+                    <p className="text-gray-600">(63) 98502-7508</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
+                    <Mail className="w-6 h-6 text-secondary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-1">E-mail</h4>
+                    <p className="text-gray-600">joanyraraujo@gmail.com</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-bold text-primary mb-6">Horário de Atendimento</h3>
+              <ul className="space-y-2">
+                <li className="flex justify-between">
+                  <span className="font-medium">Segunda - Sexta:</span>
+                  <span>08:00 - 18:00</span>
+                </li>
+                <li className="flex justify-between">
+                  <span className="font-medium">Sábado:</span>
+                  <span>09:00 - 12:00</span>
+                </li>
+                <li className="flex justify-between">
+                  <span className="font-medium">Domingo:</span>
+                  <span>Fechado</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Contact;
