@@ -35,7 +35,7 @@ const ServiceCard = ({ title, description, imageSrc }: ServiceCardProps) => {
       ref={cardRef} 
       className={`relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
     >
-      <div className="h-64 overflow-hidden">
+      <div className="overflow-hidden">
         <AspectRatio ratio={16 / 9} className="bg-muted">
           <img 
             src={imageSrc} 
@@ -45,8 +45,8 @@ const ServiceCard = ({ title, description, imageSrc }: ServiceCardProps) => {
           />
         </AspectRatio>
       </div>
-      <div className="p-6 bg-white">
-        <h3 className="text-xl font-bold text-primary mb-3">{title}</h3>
+      <div className="p-4 bg-white">
+        <h3 className="text-xl font-bold text-primary mb-2">{title}</h3>
         <p className="text-gray-600">{description}</p>
       </div>
     </div>
