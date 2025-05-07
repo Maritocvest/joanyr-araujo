@@ -54,32 +54,32 @@ const Services = () => {
     {
       title: "Aposentadoria",
       description: "Orientação completa sobre os diferentes tipos de aposentadoria, incluindo por idade, tempo de contribuição e especial.",
-      imageSrc: "/lovable-uploads/1c5203f3-da8a-4b4b-9032-5cf6b7bee16b.png"
+      imageSrc: "/lovable-uploads/ce960b69-e49a-4875-ac71-9539105b89a8.png"
     },
     {
       title: "Pensão por Morte",
       description: "Assistência para dependentes de segurados falecidos obterem pensão por morte, garantindo a continuidade do sustento familiar.",
-      imageSrc: "/lovable-uploads/bbfb0eb8-c76c-4b40-b347-16d6dfbff4a6.png"
+      imageSrc: "/lovable-uploads/d654eba2-a179-4dc6-a8ea-7d138ecfceb7.png"
     },
     {
       title: "BPC/LOAS",
       description: "Suporte para solicitar o Benefício de Prestação Continuada, garantindo o suporte financeiro necessário para quem não possui meios de prover a própria manutenção.",
-      imageSrc: "/lovable-uploads/b33378af-1721-4652-9d70-50d6941be361.png"
+      imageSrc: "/lovable-uploads/f3748dca-1280-4824-acdb-5eba97046394.png"
     },
     {
       title: "Benefícios por Incapacidade",
       description: "Assistência na obtenção de benefícios como auxílio-doença e aposentadoria por invalidez, assegurando o reconhecimento da sua condição.",
-      imageSrc: "/lovable-uploads/e9ba96ab-0f74-470b-98ef-b5c24757e28c.png"
+      imageSrc: "/lovable-uploads/00381f21-d587-4e6f-83a2-7bedbf1e29cd.png"
     },
     {
       title: "Revisão de Benefícios",
       description: "Análise e atuação em pedidos de revisão quando os benefícios são calculados ou aplicados de forma incorreta.",
-      imageSrc: "/lovable-uploads/f717d3c0-02ca-48c0-9b4b-21ffe65a9030.png"
+      imageSrc: "/lovable-uploads/33c5081a-156a-482e-af9b-c88a0f505c37.png"
     },
     {
       title: "Recursos Administrativos e Processos Judiciais",
       description: "Representação eficaz frente a negativas injustas, utilizando todos os recursos legais disponíveis.",
-      imageSrc: "/lovable-uploads/8e24e8d8-59e0-4acd-88ac-21b663331d6f.png"
+      imageSrc: "/lovable-uploads/ed788150-242a-4eae-aa04-76877d02165c.png"
     }
   ];
 

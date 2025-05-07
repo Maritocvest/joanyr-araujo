@@ -8,6 +8,8 @@ import CTA from '@/components/CTA';
 import FAQ from '@/components/FAQ';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
+import WhatsAppButton from '@/components/WhatsAppButton';
+import CookieConsent from '@/components/CookieConsent';
 import { useEffect } from 'react';
 
 const Index = () => {
@@ -28,6 +30,8 @@ const Index = () => {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppButton />
+      <CookieConsent />
     </div>
   );
 };
