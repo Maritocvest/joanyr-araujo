@@ -1,5 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 type ServiceCardProps = {
   title: string;
@@ -35,11 +36,14 @@ const ServiceCard = ({ title, description, imageSrc }: ServiceCardProps) => {
       className={`relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
     >
       <div className="h-64 overflow-hidden">
-        <img 
-          src={imageSrc} 
-          alt={title} 
-          className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-        />
+        <AspectRatio ratio={16 / 9} className="bg-muted">
+          <img 
+            src={imageSrc} 
+            alt={title} 
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+            loading="lazy"
+          />
+        </AspectRatio>
       </div>
       <div className="p-6 bg-white">
         <h3 className="text-xl font-bold text-primary mb-3">{title}</h3>
