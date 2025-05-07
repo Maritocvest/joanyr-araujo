@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,9 +12,9 @@ const Hero = () => {
         animationDelay: '0.2s'
       }}>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            ASSEGURE SEUS <span className="text-gradient">DIREITOS PREVIDENCIÁRIOS</span>
+            GARANTA SEUS <span className="text-gradient">DIREITOS PREVIDENCIÁRIOS</span>
           </h2>
-          <h3 className="text-2xl md:text-3xl font-semibold mb-6">COM SUPORTE ESPECIALIZADO</h3>
+          <h3 className="text-2xl md:text-3xl font-semibold mb-6">COM QUEM ENTENDE DO ASSUNTO!</h3>
           <p className="text-lg mb-8 text-gray-200 max-w-xl">Chega de dores de cabeça com a burocracia previdenciária. Com mais de 14 anos de experiência, oferecemos acompanhamento especializado para que você tenha segurança e tranquilidade na hora de conquistar seus direitos.</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="#contato" className="btn-primary text-center">Falar com Advogado</a>
