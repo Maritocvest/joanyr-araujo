@@ -31,20 +31,24 @@ const Contact = () => {
     
     try {
       const templateParams = {
-        to_email: 'cleonegomes@gmail.com',
         from_name: formData.name,
         from_email: formData.email,
         from_phone: formData.phone,
         message: formData.message,
+        to_name: "Joany Araújo",  // Nome do destinatário
+        reply_to: formData.email,
       };
       
+      // Enviando o email diretamente sem especificar um template_id
+      // O EmailJS usará o template padrão associado ao serviço
       await emailjs.send(
         'service_zje0pex', // Your EmailJS service ID
-        'template_default', // Replace with your template ID when you create one in EmailJS
-        templateParams
+        'contact_form',    // Template ID - use o ID do template que você criou no EmailJS
+        templateParams,
+        'vo8bO2b27gn2pgDsP' // Public key (opcional aqui, pois já inicializamos)
       );
       
-      console.log('Form submitted:', formData);
+      console.log('Form submitted successfully:', formData);
       toast({
         title: "Mensagem enviada!",
         description: "Entraremos em contato em breve.",
