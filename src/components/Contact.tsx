@@ -1,6 +1,6 @@
 
 import { Phone, Mail, MapPin } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import emailjs from 'emailjs-com';
 
@@ -14,6 +14,11 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init("Joanyaraujo");
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -24,8 +29,6 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      // Configure EmailJS with your service ID, template ID, and user ID
-      // Replace these with your actual EmailJS credentials
       const templateParams = {
         to_email: 'cleonegomes@gmail.com',
         from_name: formData.name,
@@ -35,10 +38,9 @@ const Contact = () => {
       };
       
       await emailjs.send(
-        'service_default', // Replace with your service ID
-        'template_default', // Replace with your template ID
-        templateParams,
-        'your_user_id' // Replace with your user ID
+        'service_zje0pex', // Your EmailJS service ID
+        'template_default', // Replace with your template ID when you create one in EmailJS
+        templateParams
       );
       
       console.log('Form submitted:', formData);
