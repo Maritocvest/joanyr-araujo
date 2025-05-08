@@ -14,9 +14,10 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Initialize EmailJS
+  // Initialize EmailJS with your public key
   useEffect(() => {
-    emailjs.init("Joanyaraujo");
+    // Using the format recommended by EmailJS - this should be your public key, not your username
+    emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your actual public key from EmailJS dashboard
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
