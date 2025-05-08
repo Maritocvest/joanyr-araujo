@@ -2,6 +2,7 @@
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import emailjs from 'emailjs-com';
 
 const Contact = () => {
   const { toast } = useToast();
@@ -11,25 +12,57 @@ const Contact = () => {
     phone: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    toast({
-      title: "Mensagem enviada!",
-      description: "Entraremos em contato em breve.",
-    });
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      message: ''
-    });
+    setIsSubmitting(true);
+    
+    try {
+      // Configure EmailJS with your service ID, template ID, and user ID
+      // Replace these with your actual EmailJS credentials
+      const templateParams = {
+        to_email: 'cleonegomes@gmail.com',
+        from_name: formData.name,
+        from_email: formData.email,
+        from_phone: formData.phone,
+        message: formData.message,
+      };
+      
+      await emailjs.send(
+        'service_default', // Replace with your service ID
+        'template_default', // Replace with your template ID
+        templateParams,
+        'your_user_id' // Replace with your user ID
+      );
+      
+      console.log('Form submitted:', formData);
+      toast({
+        title: "Mensagem enviada!",
+        description: "Entraremos em contato em breve.",
+      });
+      
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: "Erro ao enviar mensagem",
+        description: "Por favor, tente novamente mais tarde.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -94,7 +127,13 @@ const Contact = () => {
                   required
                 ></textarea>
               </div>
-              <button type="submit" className="w-full btn-primary">Enviar Mensagem</button>
+              <button 
+                type="submit" 
+                className="w-full btn-primary flex items-center justify-center"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
+              </button>
             </form>
           </div>
 
