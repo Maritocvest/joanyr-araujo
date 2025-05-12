@@ -1,4 +1,3 @@
-
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -17,7 +16,7 @@ const Contact = () => {
   // Initialize EmailJS with your public key
   useEffect(() => {
     // Using the format recommended by EmailJS
-    emailjs.init("vo8bO2b27gn2pgDsP"); // Correct public key
+    emailjs.init("vo8bO2b27gn2pgDsP"); // Chave pública correta
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -35,15 +34,14 @@ const Contact = () => {
         from_email: formData.email,
         from_phone: formData.phone,
         message: formData.message,
-        to_name: "Joany Araújo",  // Nome do destinatário
+        to_name: "Joany Araújo",
         reply_to: formData.email,
       };
       
-      // Enviando o email diretamente sem especificar um template_id
-      // O EmailJS usará o template padrão associado ao serviço
+      // Enviando o email usando o service ID e template ID corretos das suas configurações do EmailJS
       await emailjs.send(
-        'service_zje0pex', // Your EmailJS service ID
-        'contact_form',    // Template ID - use o ID do template que você criou no EmailJS
+        'service_tsmlkwr', // Service ID correto da imagem
+        'template_z5lm1l7', // Template ID correto da imagem
         templateParams,
         'vo8bO2b27gn2pgDsP' // Public key (opcional aqui, pois já inicializamos)
       );
