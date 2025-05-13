@@ -16,16 +16,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 214 100% 12%;
 
-    --primary: 214 100% 12%;
+    --primary: 222 47% 20%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 45 100% 60%;
-    --secondary-foreground: 214 100% 12%;
+    --secondary: 44 61% 70%;
+    --secondary-foreground: 222 47% 20%;
 
     --muted: 214 10% 90%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 214 20% 30%;
+    --accent: 220 14% 46%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -47,24 +47,28 @@
     @apply bg-background text-foreground font-montserrat;
   }
 
+  h1 {
+    @apply uppercase;
+  }
+
   .text-gradient {
     @apply bg-gradient-to-r from-secondary to-secondary/80 bg-clip-text text-transparent;
   }
 
   .btn-primary {
-    @apply bg-secondary hover:bg-secondary/90 text-primary font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105;
+    @apply border-2 border-secondary text-secondary bg-transparent hover:bg-secondary hover:text-white font-bold py-3 px-8 rounded-lg shadow-sm transition-all duration-300 transform hover:scale-105;
   }
   
   .btn-secondary {
-    @apply bg-accent hover:bg-accent/90 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105;
+    @apply border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-white font-bold py-3 px-8 rounded-lg shadow-sm transition-all duration-300 transform hover:scale-105;
   }
   
   .service-card {
-    @apply bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl hover:scale-105;
+    @apply bg-white rounded-lg shadow-sm p-6 transition-all duration-300 hover:shadow-lg;
   }
   
   .service-icon {
-    @apply w-16 h-16 mx-auto mb-4 text-accent;
+    @apply w-5 h-5 text-secondary;
   }
 
   .fade-in {

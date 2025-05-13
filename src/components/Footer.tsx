@@ -17,19 +17,19 @@ const Footer = () => {
             <h3 className="text-xl font-bold mb-4 text-secondary">Joanyr Araujo</h3>
             <p className="mb-4 text-gray-300">Advogado Previdenciarista | INSS | RPPS</p>
             <p className="text-sm text-gray-300">
-              14 anos de experiência em direito previdenciário, ajudando pessoas a garantirem seus benefícios com segurança e tranquilidade.
+              14 anos de experiência em direito previdenciário, orientando pessoas a compreenderem e obterem seus benefícios de forma segura.
             </p>
           </div>
 
           <div>
             <h3 className="text-xl font-bold mb-4 text-secondary">Links Rápidos</h3>
             <ul className="space-y-2">
-              <li><a href="#inicio" className="text-gray-300 hover:text-secondary transition-colors">Início</a></li>
-              <li><a href="#sobre" className="text-gray-300 hover:text-secondary transition-colors">Sobre</a></li>
-              <li><a href="#servicos" className="text-gray-300 hover:text-secondary transition-colors">Serviços</a></li>
-              <li><a href="#diferenciais" className="text-gray-300 hover:text-secondary transition-colors">Diferenciais</a></li>
-              <li><a href="#faq" className="text-gray-300 hover:text-secondary transition-colors">Perguntas Frequentes</a></li>
-              <li><a href="#contato" className="text-gray-300 hover:text-secondary transition-colors">Contato</a></li>
+              <li><a href="#inicio" className="text-gray-300 hover:text-secondary transition-colors" aria-label="Ir para a seção inicial">Início</a></li>
+              <li><a href="#sobre" className="text-gray-300 hover:text-secondary transition-colors" aria-label="Ir para a seção sobre">Sobre</a></li>
+              <li><a href="#servicos" className="text-gray-300 hover:text-secondary transition-colors" aria-label="Ir para a seção de serviços">Serviços</a></li>
+              <li><a href="#diferenciais" className="text-gray-300 hover:text-secondary transition-colors" aria-label="Ir para a seção de diferenciais">Diferenciais</a></li>
+              <li><a href="#faq" className="text-gray-300 hover:text-secondary transition-colors" aria-label="Ir para a seção de perguntas frequentes">Perguntas Frequentes</a></li>
+              <li><a href="#contato" className="text-gray-300 hover:text-secondary transition-colors" aria-label="Ir para a seção de contato">Contato</a></li>
             </ul>
           </div>
 
@@ -40,14 +40,14 @@ const Footer = () => {
             <p className="mb-4 text-gray-300">Email: joanyraraujo@gmail.com</p>
 
             <div className="flex space-x-4 mt-4">
-              <a href="https://www.instagram.com/joanyraraujo/" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">
-                <Instagram className="w-5 h-5" />
+              <a href="https://www.instagram.com/joanyraraujo/" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <Instagram className="w-5 h-5" aria-hidden="true" />
               </a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary hover:text-primary transition-colors">
-                <Facebook className="w-5 h-5" />
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary hover:text-primary transition-colors" aria-label="Facebook">
+                <Facebook className="w-5 h-5" aria-hidden="true" />
               </a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary hover:text-primary transition-colors">
-                <Linkedin className="w-5 h-5" />
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary hover:text-primary transition-colors" aria-label="LinkedIn">
+                <Linkedin className="w-5 h-5" aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -60,8 +60,9 @@ const Footer = () => {
           <button 
             onClick={scrollToTop}
             className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-primary hover:bg-secondary/80 transition-colors"
+            aria-label="Voltar ao topo da página"
           >
-            <ArrowUp className="w-5 h-5" />
+            <ArrowUp className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
       </div>

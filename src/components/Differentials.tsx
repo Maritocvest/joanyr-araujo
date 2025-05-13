@@ -1,6 +1,7 @@
 
 import { Award, Users, CheckCircle, Accessibility } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { Card } from "@/components/ui/card";
 
 type DifferentialCardProps = {
   title: string;
@@ -34,16 +35,18 @@ const DifferentialCard = ({ title, description, icon, delay }: DifferentialCardP
   return (
     <div 
       ref={cardRef} 
-      className={`bg-white p-6 rounded-lg shadow-lg transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <div className="flex items-center mb-4">
-        <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
-          {icon}
+      <Card className="rounded-lg shadow-sm p-6 bg-white">
+        <div className="flex flex-col items-start">
+          <div className="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center mb-4">
+            {icon}
+          </div>
+          <h3 className="text-lg font-semibold text-primary mb-2">{title}</h3>
+          <p className="text-gray-600">{description}</p>
         </div>
-        <h3 className="text-xl font-bold text-primary">{title}</h3>
-      </div>
-      <p className="text-gray-600">{description}</p>
+      </Card>
     </div>
   );
 };
@@ -52,23 +55,23 @@ const Differentials = () => {
   const differentials = [
     {
       title: "Experiência Comprovada",
-      description: "Mais de 14 anos de sucesso em direito previdenciário.",
-      icon: <Award className="w-6 h-6 text-secondary" />,
+      description: "Mais de 14 anos de atuação em direito previdenciário.",
+      icon: <Award className="w-5 h-5 text-secondary" aria-hidden="true" />,
     },
     {
       title: "Atendimento Personalizado",
       description: "Cada caso recebe atenção detalhada para entender e atender às necessidades específicas de nossos clientes.",
-      icon: <Users className="w-6 h-6 text-secondary" />,
+      icon: <Users className="w-5 h-5 text-secondary" aria-hidden="true" />,
     },
     {
       title: "Clareza e transparência",
-      description: "Usamos linguagem acessível para que você compreenda tudo o que está acontecendo e quais as próximas etapas.",
-      icon: <CheckCircle className="w-6 h-6 text-secondary" />,
+      description: "Usamos linguagem acessível para que você compreenda todas as etapas do processo previdenciário.",
+      icon: <CheckCircle className="w-5 h-5 text-secondary" aria-hidden="true" />,
     },
     {
       title: "Acessibilidade",
       description: "Atendimento online para maior conveniência ou presencial em nossa sede, de acordo com as necessidades do cliente.",
-      icon: <Accessibility className="w-6 h-6 text-secondary" />,
+      icon: <Accessibility className="w-5 h-5 text-secondary" aria-hidden="true" />,
     }
   ];
 

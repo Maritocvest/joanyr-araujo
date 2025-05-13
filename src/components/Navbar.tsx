@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-primary shadow-lg py-2' : 'bg-transparent py-4'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-primary shadow-sm py-2' : 'bg-transparent py-4'}`}>
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
         <div className="flex items-center">
           <h1 className="text-secondary font-bold text-2xl">Joanyr Araujo</h1>
@@ -34,7 +34,11 @@ const Navbar = () => {
 
         {isMobile ? (
           <div className="flex items-center">
-            <button onClick={toggleMenu} className="text-white">
+            <button 
+              onClick={toggleMenu} 
+              className="text-white" 
+              aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+            >
               {isMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
@@ -46,7 +50,7 @@ const Navbar = () => {
             <a href="#diferenciais" className="text-white hover:text-secondary transition-colors duration-300">Diferenciais</a>
             <a href="#faq" className="text-white hover:text-secondary transition-colors duration-300">Perguntas Frequentes</a>
             <a href="#contato" className="text-white hover:text-secondary transition-colors duration-300">Contato</a>
-            <a href="#contato" className="btn-primary">Falar com Advogado</a>
+            <a href="#contato" className="btn-primary" aria-label="Solicitar orientação jurídica">Solicitar Orientação</a>
           </div>
         )}
       </div>
@@ -61,7 +65,7 @@ const Navbar = () => {
             <a href="#diferenciais" className="text-white hover:text-secondary transition-colors duration-300" onClick={toggleMenu}>Diferenciais</a>
             <a href="#faq" className="text-white hover:text-secondary transition-colors duration-300" onClick={toggleMenu}>Perguntas Frequentes</a>
             <a href="#contato" className="text-white hover:text-secondary transition-colors duration-300" onClick={toggleMenu}>Contato</a>
-            <a href="#contato" className="btn-primary text-center" onClick={toggleMenu}>Falar com Advogado</a>
+            <a href="#contato" className="btn-primary text-center" onClick={toggleMenu} aria-label="Solicitar orientação jurídica">Solicitar Orientação</a>
           </div>
         </div>
       )}
