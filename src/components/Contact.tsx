@@ -1,3 +1,4 @@
+
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -9,14 +10,15 @@ const Contact = () => {
     name: '',
     email: '',
     phone: '',
-    message: ''
+    message: '',
+    lgpdConsent: false
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Initialize EmailJS with your public key
   useEffect(() => {
     // Using the format recommended by EmailJS
-    emailjs.init("vo8bO2b27gn2pgDsP"); // Chave pública correta
+    emailjs.init("vo8bO2b27gn2pgDsP");
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -24,8 +26,23 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: checked }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.lgpdConsent) {
+      toast({
+        title: "Consentimento necessário",
+        description: "Por favor, aceite a política de privacidade para continuar.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
@@ -34,16 +51,16 @@ const Contact = () => {
         from_email: formData.email,
         from_phone: formData.phone,
         message: formData.message,
-        to_name: "Joany Araújo",
+        to_name: "Joanyr Araújo",
         reply_to: formData.email,
       };
       
       // Enviando o email usando o service ID e template ID corretos das suas configurações do EmailJS
       await emailjs.send(
-        'service_tsmlkwr', // Service ID correto da imagem
-        'template_z5lm1l7', // Template ID correto da imagem
+        'service_tsmlkwr',
+        'template_z5lm1l7',
         templateParams,
-        'vo8bO2b27gn2pgDsP' // Public key (opcional aqui, pois já inicializamos)
+        'vo8bO2b27gn2pgDsP'
       );
       
       console.log('Form submitted successfully:', formData);
@@ -56,7 +73,8 @@ const Contact = () => {
         name: '',
         email: '',
         phone: '',
-        message: ''
+        message: '',
+        lgpdConsent: false
       });
     } catch (error) {
       console.error('Error sending email:', error);
@@ -77,13 +95,13 @@ const Contact = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">ENTRE EM CONTATO</h2>
           <div className="w-24 h-1 bg-secondary mx-auto mb-6"></div>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Estamos prontos para ajudar você a garantir seus direitos previdenciários. Preencha o formulário abaixo e entraremos em contato o mais breve possível.
+            Estamos à disposição para fornecer informações sobre direitos previdenciários. Preencha o formulário abaixo e entraremos em contato.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg">
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-sm">
               <div className="mb-6">
                 <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Nome Completo</label>
                 <input
@@ -94,6 +112,7 @@ const Contact = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                   required
+                  aria-label="Seu nome completo"
                 />
               </div>
               <div className="mb-6">
@@ -106,6 +125,7 @@ const Contact = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                   required
+                  aria-label="Seu endereço de e-mail"
                 />
               </div>
               <div className="mb-6">
@@ -118,6 +138,7 @@ const Contact = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                   required
+                  aria-label="Seu número de telefone ou WhatsApp"
                 />
               </div>
               <div className="mb-6">
@@ -130,12 +151,31 @@ const Contact = () => {
                   rows={4}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                   required
+                  aria-label="Sua mensagem"
                 ></textarea>
+              </div>
+              <div className="mb-6">
+                <div className="flex items-start">
+                  <input
+                    type="checkbox"
+                    id="lgpdConsent"
+                    name="lgpdConsent"
+                    checked={formData.lgpdConsent}
+                    onChange={handleCheckboxChange}
+                    className="mt-1 mr-2"
+                    required
+                    aria-label="Consentimento para tratamento de dados pessoais"
+                  />
+                  <label htmlFor="lgpdConsent" className="text-sm text-gray-700">
+                    Li e concordo com a <a href="/privacidade" className="text-secondary hover:underline">Política de Privacidade</a> e autorizo o uso dos meus dados para contato.
+                  </label>
+                </div>
               </div>
               <button 
                 type="submit" 
                 className="w-full btn-primary flex items-center justify-center"
                 disabled={isSubmitting}
+                aria-label="Enviar mensagem de contato"
               >
                 {isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
               </button>
@@ -143,13 +183,13 @@ const Contact = () => {
           </div>
 
           <div className="flex flex-col justify-between">
-            <div className="bg-white p-8 rounded-lg shadow-lg mb-8">
+            <div className="bg-white p-8 rounded-lg shadow-sm mb-8">
               <h3 className="text-2xl font-bold text-primary mb-6">Informações de Contato</h3>
               
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
-                    <MapPin className="w-6 h-6 text-secondary" />
+                    <MapPin className="w-6 h-6 text-secondary" aria-hidden="true" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-lg mb-1">Endereço</h4>
@@ -159,17 +199,17 @@ const Contact = () => {
 
                 <div className="flex items-start">
                   <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
-                    <Phone className="w-6 h-6 text-secondary" />
+                    <Phone className="w-6 h-6 text-secondary" aria-hidden="true" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-lg mb-1">WhatsApp</h4>
+                    <h4 className="font-semibold text-lg mb-1">Telefone</h4>
                     <p className="text-gray-600">(63) 98502-7508</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
                   <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
-                    <Mail className="w-6 h-6 text-secondary" />
+                    <Mail className="w-6 h-6 text-secondary" aria-hidden="true" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-lg mb-1">E-mail</h4>
@@ -179,7 +219,7 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-lg shadow-lg">
+            <div className="bg-white p-8 rounded-lg shadow-sm">
               <h3 className="text-2xl font-bold text-primary mb-6">Horário de Atendimento</h3>
               <ul className="space-y-2">
                 <li className="flex justify-between">

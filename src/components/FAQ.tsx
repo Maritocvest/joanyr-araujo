@@ -42,19 +42,19 @@ const FAQ = () => {
   const faqs = [
     {
       question: "Quem tem direito ao benefício do BPC/Loas?",
-      answer: "O Benefício de Prestação Continuada (BPC/Loas) é destinado a idosos acima de 65 anos ou pessoas com deficiência de qualquer idade que tenham impedimentos de longo prazo (físicos, mentais, intelectuais ou sensoriais) que dificultem sua participação na sociedade, ambos terão que comprovar baixa renda. É necessário demonstrar que a renda por pessoa da família é inferior a 1/4 do salário mínimo vigente. Em alguns casos, a Justiça pode flexibilizar esse critério."
+      answer: "O Benefício de Prestação Continuada (BPC/Loas) é destinado a idosos acima de 65 anos ou pessoas com deficiência de qualquer idade que tenham impedimentos de longo prazo (físicos, mentais, intelectuais ou sensoriais) que dificultem sua participação na sociedade, ambos terão que comprovar baixa renda. É necessário demonstrar que a renda por pessoa da família é inferior a 1/4 do salário mínimo vigente. Em alguns casos, a Justiça pode flexibilizar esse critério mediante análise das particularidades do caso concreto."
     },
     {
       question: "Quais condições médicas podem dar direito a benefícios por incapacidade?",
-      answer: "Diversas condições de saúde podem dar direito a benefícios por incapacidade, como doenças graves, transtornos mentais severos, doenças neurológicas, cardiopatias graves, entre outras. O importante é que a condição médica comprovadamente impeça o trabalho, seja temporariamente (auxílio-doença) ou permanentemente (aposentadoria por invalidez). Cada caso é avaliado pela perícia médica do INSS."
+      answer: "Diversas condições de saúde podem justificar a concessão de benefícios por incapacidade, como doenças graves, transtornos mentais severos, doenças neurológicas, cardiopatias graves, entre outras. O importante é que haja documentação médica que comprove a condição e sua interferência na capacidade laboral, seja temporariamente (auxílio por incapacidade temporária) ou permanentemente (aposentadoria por incapacidade permanente). Cada caso é analisado individualmente pela perícia médica do INSS."
     },
     {
-      question: "Quais perícias deverei fazer?",
-      answer: "Dependendo do benefício solicitado, você poderá passar por perícias médicas (em caso de benefícios por incapacidade) ou perícias sociais (para BPC/LOAS). Em alguns casos, podem ser necessárias perícias especializadas para comprovar condições específicas. Como seu advogado, irei orientá-lo sobre como se preparar adequadamente para cada avaliação."
+      question: "Quais perícias são necessárias nos processos previdenciários?",
+      answer: "Dependendo do benefício solicitado, podem ser necessárias diferentes tipos de perícias. Para benefícios por incapacidade, a perícia médica é imprescindível. Para o BPC/LOAS, além da perícia médica (em caso de pessoa com deficiência), é realizada uma avaliação social para verificar as condições socioeconômicas. Em alguns casos específicos, podem ser necessárias perícias especializadas para comprovar condições de trabalho ou de saúde particulares."
     },
     {
       question: "O que fazer quando um benefício é negado pelo INSS?",
-      answer: "Quando um benefício é negado pelo INSS, existem alguns caminhos possíveis: 1) Entrar com recurso administrativo no próprio INSS; 2) Ajuizar uma ação na Justiça Federal; 3) Apresentar um novo requerimento com documentação complementar. Como seu advogado, analisarei seu caso específico e recomendarei a estratégia mais adequada para o seu caso."
+      answer: "Quando um benefício é negado pelo INSS, existem algumas possibilidades de revisão da decisão: 1) Recurso administrativo junto ao próprio INSS, através de petição dirigida à Junta de Recursos; 2) Ajuizamento de ação na Justiça Federal; 3) Em alguns casos, pode ser viável apresentar um novo requerimento administrativo com documentação complementar. A estratégia mais adequada dependerá da análise do caso específico e dos fundamentos da negativa."
     }
   ];
 
@@ -65,7 +65,7 @@ const FAQ = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">PERGUNTAS FREQUENTES</h2>
           <div className="w-24 h-1 bg-secondary mx-auto mb-6"></div>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Esclareça suas dúvidas sobre direito previdenciário e descubra como podemos ajudá-lo a compreender seus benefícios.
+            Esclareça suas dúvidas sobre direito previdenciário e compreenda melhor os aspectos jurídicos relacionados aos benefícios previdenciários.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ const FAQ = () => {
         </div>
 
         <div className="text-center mt-12">
-          <p className="text-gray-600 mb-6">Não encontrou a resposta para sua dúvida? Entre em contato conosco.</p>
+          <p className="text-gray-600 mb-6">Possui outras dúvidas sobre direito previdenciário? Entre em contato para receber orientação especializada.</p>
           <a href="#contato" className="btn-primary" aria-label="Solicitar orientação jurídica">Solicitar Orientação</a>
         </div>
       </div>

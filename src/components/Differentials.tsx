@@ -38,8 +38,8 @@ const DifferentialCard = ({ title, description, icon, delay }: DifferentialCardP
       className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <Card className="rounded-lg shadow-sm p-6 bg-white">
-        <div className="flex flex-col items-start">
+      <Card className="rounded-lg shadow-sm p-6 bg-white h-full">
+        <div className="flex flex-col items-start h-full">
           <div className="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center mb-4">
             {icon}
           </div>
@@ -54,23 +54,23 @@ const DifferentialCard = ({ title, description, icon, delay }: DifferentialCardP
 const Differentials = () => {
   const differentials = [
     {
-      title: "Experiência Comprovada",
-      description: "Mais de 14 anos de atuação em direito previdenciário.",
+      title: "Experiência Profissional",
+      description: "Atuação há mais de 14 anos na área do direito previdenciário, com conhecimento técnico específico sobre normas, precedentes e procedimentos administrativos e judiciais.",
       icon: <Award className="w-5 h-5 text-secondary" aria-hidden="true" />,
     },
     {
-      title: "Atendimento Personalizado",
-      description: "Cada caso recebe atenção detalhada para entender e atender às necessidades específicas de nossos clientes.",
+      title: "Atendimento Individualizado",
+      description: "Análise detalhada de cada situação, considerando as particularidades e complexidades específicas de cada caso previdenciário.",
       icon: <Users className="w-5 h-5 text-secondary" aria-hidden="true" />,
     },
     {
-      title: "Clareza e transparência",
-      description: "Usamos linguagem acessível para que você compreenda todas as etapas do processo previdenciário.",
+      title: "Comunicação Clara",
+      description: "Compromisso com explicações acessíveis sobre conceitos jurídicos complexos, possibilitando que o cliente compreenda plenamente sua situação previdenciária.",
       icon: <CheckCircle className="w-5 h-5 text-secondary" aria-hidden="true" />,
     },
     {
-      title: "Acessibilidade",
-      description: "Atendimento online para maior conveniência ou presencial em nossa sede, de acordo com as necessidades do cliente.",
+      title: "Atendimento Adaptado",
+      description: "Disponibilidade de consultas remotas ou presenciais conforme a necessidade e disponibilidade do cliente.",
       icon: <Accessibility className="w-5 h-5 text-secondary" aria-hidden="true" />,
     }
   ];
@@ -81,6 +81,9 @@ const Differentials = () => {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">NOSSOS DIFERENCIAIS</h2>
           <div className="w-24 h-1 bg-secondary mx-auto mb-6"></div>
+          <p className="text-gray-200 max-w-2xl mx-auto mb-8">
+            Conheça as características que orientam nossa atuação profissional em direito previdenciário.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 
 const Index = () => {
   useEffect(() => {
-    document.title = "Joanyr Araujo | Advogado Previdenciarista";
+    document.title = "Joanyr Araujo | Advogado Previdenciarista em Palmas - Orientação Especializada";
   }, []);
 
   return (

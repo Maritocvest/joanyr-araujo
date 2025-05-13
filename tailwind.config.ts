@@ -34,7 +34,7 @@ export default {
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#E3C77F",
+          DEFAULT: "#C19A6B", // More subdued gold tone
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
