@@ -100,4 +100,9 @@
       transform: translateX(0);
     }
   }
+  
+  /* Form inputs text color fix */
+  input, textarea, select {
+    @apply text-gray-800;
+  }
 }

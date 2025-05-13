@@ -68,6 +68,15 @@ const Footer = () => {
             <ArrowUp className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
+        
+        <div className="mt-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+          <p className="text-gray-400 text-sm">
+            Desenvolvido por <a href="https://www.innovto.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">InnovTO</a>
+          </p>
+          <a href="https://www.innovto.com.br" target="_blank" rel="noopener noreferrer" aria-label="InnovTO website">
+            <img src="/lovable-uploads/50a8c418-efbd-44eb-b7ee-8a5f3f63b718.png" alt="InnovTO Logo" className="h-10" />
+          </a>
+        </div>
       </div>
     </footer>
   );
