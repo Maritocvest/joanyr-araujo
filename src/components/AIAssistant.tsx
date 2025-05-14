@@ -165,7 +165,7 @@ const AIAssistant = () => {
           <Card className="w-[350px] sm:w-[400px] mt-4 overflow-hidden shadow-xl border-primary/20">
             <div className="bg-primary text-white p-4 flex items-center space-x-3">
               <Avatar className="h-10 w-10 border-2 border-secondary">
-                <AvatarImage src="/lovable-uploads/6f99b0f3-a90a-4cdc-8129-0a0e5309dfff.png" alt="Dr. Joanyr Araujo" />
+                <AvatarImage src="/lovable-uploads/e24ac599-dff2-4b08-aa54-fbbd980f3b9a.png" alt="Dr. Joanyr Araujo" />
                 <AvatarFallback>JA</AvatarFallback>
               </Avatar>
               <div>
@@ -196,7 +196,7 @@ const AIAssistant = () => {
                     >
                       {message.role === 'assistant' && (
                         <Avatar className="h-8 w-8 mr-2 flex-shrink-0">
-                          <AvatarImage src="/lovable-uploads/6f99b0f3-a90a-4cdc-8129-0a0e5309dfff.png" alt="Dr. Joanyr Araujo" />
+                          <AvatarImage src="/lovable-uploads/e24ac599-dff2-4b08-aa54-fbbd980f3b9a.png" alt="Dr. Joanyr Araujo" />
                           <AvatarFallback>JA</AvatarFallback>
                         </Avatar>
                       )}
@@ -256,7 +256,7 @@ const AIAssistant = () => {
               {isLoading && (
                 <div className="flex justify-start mb-4">
                   <Avatar className="h-8 w-8 mr-2">
-                    <AvatarImage src="/lovable-uploads/6f99b0f3-a90a-4cdc-8129-0a0e5309dfff.png" alt="Dr. Joanyr Araujo" />
+                    <AvatarImage src="/lovable-uploads/e24ac599-dff2-4b08-aa54-fbbd980f3b9a.png" alt="Dr. Joanyr Araujo" />
                     <AvatarFallback>JA</AvatarFallback>
                   </Avatar>
                   <div className="p-3 rounded-lg bg-white border border-gray-200">
