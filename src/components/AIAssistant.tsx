@@ -5,12 +5,20 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare, Send, X } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { findAnswer, getSuggestions } from '@/utils/assistantKnowledgeBase';
+
+type Message = {
+  role: 'user' | 'assistant';
+  content: string;
+  options?: string[];
+};
 
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Initial greeting message
@@ -19,7 +27,8 @@ const AIAssistant = () => {
       setMessages([
         {
           role: 'assistant',
-          content: 'Olá! Sou o assistente virtual do Dr. Joanyr Araujo. Como posso orientá-lo sobre direito previdenciário hoje?'
+          content: 'Olá! Sou o assistente virtual do Dr. Joanyr Araujo. Como posso orientá-lo sobre direito previdenciário hoje?',
+          options: getSuggestions()
         }
       ]);
     }
@@ -36,15 +45,16 @@ const AIAssistant = () => {
     if (!inputMessage.trim()) return;
     
     // Add user message
-    setMessages([...messages, { role: 'user', content: inputMessage }]);
+    setMessages(prev => [...prev, { role: 'user', content: inputMessage }]);
     setIsLoading(true);
+    setShowSuggestions(false);
     
-    // Simulate AI response
+    // Process response
     setTimeout(() => {
       const response = generateResponse(inputMessage);
-      setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+      setMessages(prev => [...prev, response]);
       setIsLoading(false);
-    }, 1000);
+    }, 800);
     
     setInputMessage('');
   };
@@ -56,37 +66,54 @@ const AIAssistant = () => {
     }
   };
 
-  // Simple response generation based on keywords
-  const generateResponse = (query: string): string => {
-    const lowercaseQuery = query.toLowerCase();
+  const handleSuggestionClick = (suggestion: string) => {
+    setInputMessage(suggestion);
+    setMessages(prev => [...prev, { role: 'user', content: suggestion }]);
+    setIsLoading(true);
+    setShowSuggestions(false);
     
-    if (lowercaseQuery.includes('aposentadoria') || lowercaseQuery.includes('aposentar')) {
-      return 'Para aposentadoria, é necessário analisar seu tempo de contribuição, idade e outras variáveis. A reforma da previdência trouxe mudanças significativas nas regras. Para uma análise personalizada, entre em contato conosco.';
-    } 
-    else if (lowercaseQuery.includes('bpc') || lowercaseQuery.includes('loas')) {
-      return 'O BPC/LOAS é destinado a idosos acima de 65 anos ou pessoas com deficiência de baixa renda. É necessário comprovar que a renda familiar per capita é inferior a 1/4 do salário mínimo. Podemos auxiliar na análise do seu caso.';
+    setTimeout(() => {
+      const response = generateResponse(suggestion);
+      setMessages(prev => [...prev, response]);
+      setIsLoading(false);
+    }, 800);
+  };
+
+  const handleOptionClick = (option: string) => {
+    setMessages(prev => [...prev, { role: 'user', content: option }]);
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      const response = generateResponse(option);
+      setMessages(prev => [...prev, response]);
+      setIsLoading(false);
+    }, 800);
+  };
+
+  // Response generation using our knowledge base
+  const generateResponse = (query: string): Message => {
+    const result = findAnswer(query);
+    
+    if (result) {
+      return {
+        role: 'assistant',
+        content: result.answer,
+        options: result.options
+      };
     }
-    else if (lowercaseQuery.includes('pensão') || lowercaseQuery.includes('morte')) {
-      return 'A pensão por morte é um benefício pago aos dependentes do segurado que faleceu. É importante verificar os requisitos e prazos, pois houve mudanças recentes na legislação. Podemos orientá-lo sobre os documentos necessários.';
-    }
-    else if (lowercaseQuery.includes('auxílio-doença') || lowercaseQuery.includes('auxílio por incapacidade')) {
-      return 'O auxílio por incapacidade temporária (antigo auxílio-doença) é concedido ao segurado que comprove estar temporariamente incapaz para o trabalho devido a doença ou acidente. É necessária perícia médica do INSS.';
-    }
-    else if (lowercaseQuery.includes('perícia') || lowercaseQuery.includes('perito')) {
-      return 'A perícia médica é fundamental para benefícios por incapacidade. Recomendamos levar todos os documentos médicos que comprovem sua condição (laudos, exames, receitas). Podemos orientá-lo sobre como se preparar adequadamente.';
-    }
-    else if (lowercaseQuery.includes('contato') || lowercaseQuery.includes('falar')) {
-      return 'Você pode entrar em contato conosco através do formulário na seção de contato, pelo telefone ou e-mail disponível no rodapé do site. Estamos à disposição para esclarecer suas dúvidas.';
-    }
-    else if (lowercaseQuery.includes('inss') || lowercaseQuery.includes('benefício negado')) {
-      return 'Se seu benefício foi negado pelo INSS, existem prazos para recurso administrativo ou judicial. É importante agir rapidamente. Podemos analisar seu caso e verificar a melhor estratégia.';
-    }
-    else if (lowercaseQuery.includes('prazo') || lowercaseQuery.includes('tempo')) {
-      return 'Os prazos no direito previdenciário variam conforme o benefício e a situação. Para recursos contra decisões do INSS, geralmente há um prazo de 30 dias. Para orientações específicas sobre seu caso, entre em contato conosco.';
-    }
-    else {
-      return 'Essa é uma questão interessante sobre direito previdenciário. Para uma orientação personalizada sobre seu caso específico, recomendo entrar em contato conosco pelo formulário na seção de contato. Ficaremos felizes em ajudar.';
-    }
+    
+    // Default response if no match found
+    const defaultResponses = [
+      "Essa é uma questão interessante sobre direito previdenciário. Para uma orientação personalizada sobre seu caso específico, recomendo entrar em contato conosco pelo formulário na seção de contato ou pelo telefone (63) 98502-7508.",
+      "Para responder adequadamente a essa questão, precisaríamos analisar seu caso específico. Por favor, entre em contato através do formulário no site ou pelo telefone (63) 98502-7508.",
+      "Sobre esse assunto, seria melhor conversarmos pessoalmente para entender todos os detalhes. Você pode agendar uma consulta através do formulário de contato ou ligando para (63) 98502-7508."
+    ];
+    
+    return {
+      role: 'assistant',
+      content: defaultResponses[Math.floor(Math.random() * defaultResponses.length)],
+      options: getSuggestions()
+    };
   };
 
   return (
@@ -127,32 +154,47 @@ const AIAssistant = () => {
               </Button>
             </div>
             
-            <div className="p-4 h-[350px] overflow-y-auto bg-gray-50">
+            <div className="p-4 h-[400px] overflow-y-auto bg-gray-50">
               {messages.map((message, index) => (
-                <div 
-                  key={index} 
-                  className={`mb-4 ${
-                    message.role === 'user' 
-                      ? 'flex justify-end' 
-                      : 'flex justify-start'
-                  }`}
-                >
-                  {message.role === 'assistant' && (
-                    <Avatar className="h-8 w-8 mr-2 flex-shrink-0">
-                      <AvatarImage src="/lovable-uploads/6f99b0f3-a90a-4cdc-8129-0a0e5309dfff.png" alt="Assistente virtual" />
-                      <AvatarFallback>AI</AvatarFallback>
-                    </Avatar>
-                  )}
-                  
+                <div key={index} className="mb-4">
                   <div 
-                    className={`p-3 rounded-lg max-w-[80%] ${
+                    className={`flex ${
                       message.role === 'user' 
-                        ? 'bg-primary text-white' 
-                        : 'bg-white border border-gray-200'
+                        ? 'justify-end' 
+                        : 'justify-start'
                     }`}
                   >
-                    <p className="text-sm">{message.content}</p>
+                    {message.role === 'assistant' && (
+                      <Avatar className="h-8 w-8 mr-2 flex-shrink-0">
+                        <AvatarImage src="/lovable-uploads/6f99b0f3-a90a-4cdc-8129-0a0e5309dfff.png" alt="Assistente virtual" />
+                        <AvatarFallback>AI</AvatarFallback>
+                      </Avatar>
+                    )}
+                    
+                    <div 
+                      className={`p-3 rounded-lg max-w-[85%] ${
+                        message.role === 'user' 
+                          ? 'bg-primary text-white' 
+                          : 'bg-white border border-gray-200'
+                      }`}
+                    >
+                      <p className="text-sm whitespace-pre-line">{message.content}</p>
+                    </div>
                   </div>
+                  
+                  {message.options && message.role === 'assistant' && (
+                    <div className="ml-10 mt-2 flex flex-wrap gap-2">
+                      {message.options.map((option, optionIndex) => (
+                        <button
+                          key={optionIndex}
+                          onClick={() => handleOptionClick(option)}
+                          className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-2 rounded-full transition-colors duration-200"
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
               
@@ -163,8 +205,26 @@ const AIAssistant = () => {
                     <AvatarFallback>AI</AvatarFallback>
                   </Avatar>
                   <div className="p-3 rounded-lg bg-white border border-gray-200">
-                    <p className="text-sm text-gray-500">Digitando...</p>
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                    </div>
                   </div>
+                </div>
+              )}
+              
+              {showSuggestions && messages.length === 1 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {getSuggestions().map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-2 rounded-full transition-colors duration-200"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
                 </div>
               )}
               
