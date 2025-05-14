@@ -9,6 +9,7 @@ import FAQ from '@/components/FAQ';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import CookieConsent from '@/components/CookieConsent';
+import AIAssistant from '@/components/AIAssistant';
 import { useEffect } from 'react';
 
 const Index = () => {
@@ -30,6 +31,7 @@ const Index = () => {
       </main>
       <Footer />
       <CookieConsent />
+      <AIAssistant />
     </div>
   );
 };
