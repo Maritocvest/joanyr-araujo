@@ -1,11 +1,13 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Send, X } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { findAnswer, getSuggestions } from '@/utils/assistantKnowledgeBase';
+import { getOpenAiAnswer, getSuggestions } from '@/services/openAiService';
 import { useToast } from '@/components/ui/use-toast';
+import assistantKnowledge from '@/data/assistantKnowledge.json';
 
 type Message = {
   role: 'user' | 'assistant' | 'system';
@@ -25,7 +27,7 @@ const AIAssistant = () => {
   // Disclaimer message
   const disclaimerMessage: Message = {
     role: 'system',
-    content: 'Este assistente virtual oferece informações gerais sobre direito previdenciário. Para uma análise completa do seu caso e aconselhamento jurídico específico, é essencial consultar diretamente com o Dr. Joanyr Araujo.'
+    content: assistantKnowledge.disclaimerMessage
   };
 
   // Initial greeting message
@@ -34,7 +36,7 @@ const AIAssistant = () => {
       setMessages([
         {
           role: 'assistant',
-          content: 'Olá! Sou o assistente virtual do Dr. Joanyr Araujo. Como posso orientá-lo sobre direito previdenciário hoje?',
+          content: assistantKnowledge.greetingMessage,
           options: getSuggestions()
         },
         disclaimerMessage
@@ -49,22 +51,37 @@ const AIAssistant = () => {
     }
   }, [messages]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
     
     // Add user message
-    setMessages(prev => [...prev, { role: 'user', content: inputMessage }]);
+    const userMessage = { role: 'user' as const, content: inputMessage };
+    setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     setShowSuggestions(false);
-    
-    // Process response
-    setTimeout(() => {
-      const response = generateResponse(inputMessage);
-      setMessages(prev => [...prev, response]);
-      setIsLoading(false);
-    }, 800);
-    
     setInputMessage('');
+    
+    // Get all the messages except system messages for context
+    const conversationHistory = messages.filter(msg => msg.role !== 'system');
+    
+    try {
+      // Process response using OpenAI
+      const response = await getOpenAiAnswer([...conversationHistory, userMessage]);
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: response.content, 
+        options: response.options 
+      }]);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      toast({
+        title: "Erro na comunicação",
+        description: "Não foi possível obter uma resposta do assistente. Por favor, tente novamente mais tarde.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -74,63 +91,65 @@ const AIAssistant = () => {
     }
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
+  const handleSuggestionClick = async (suggestion: string) => {
     setInputMessage('');
-    setMessages(prev => [...prev, { role: 'user', content: suggestion }]);
+    
+    // Add user message
+    const userMessage = { role: 'user' as const, content: suggestion };
+    setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     setShowSuggestions(false);
     
-    setTimeout(() => {
-      const response = generateResponse(suggestion);
-      setMessages(prev => [...prev, response]);
+    // Get all the messages except system messages for context
+    const conversationHistory = messages.filter(msg => msg.role !== 'system');
+    
+    try {
+      // Process response using OpenAI
+      const response = await getOpenAiAnswer([...conversationHistory, userMessage]);
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: response.content, 
+        options: response.options 
+      }]);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      toast({
+        title: "Erro na comunicação",
+        description: "Não foi possível obter uma resposta do assistente. Por favor, tente novamente mais tarde.",
+        variant: "destructive"
+      });
+    } finally {
       setIsLoading(false);
-    }, 800);
+    }
   };
 
-  const handleOptionClick = (option: string) => {
-    setMessages(prev => [...prev, { role: 'user', content: option }]);
+  const handleOptionClick = async (option: string) => {
+    // Add user message
+    const userMessage = { role: 'user' as const, content: option };
+    setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     
-    setTimeout(() => {
-      const response = generateResponse(option);
-      setMessages(prev => [...prev, response]);
+    // Get all the messages except system messages for context
+    const conversationHistory = messages.filter(msg => msg.role !== 'system');
+    
+    try {
+      // Process response using OpenAI
+      const response = await getOpenAiAnswer([...conversationHistory, userMessage]);
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: response.content, 
+        options: response.options 
+      }]);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      toast({
+        title: "Erro na comunicação",
+        description: "Não foi possível obter uma resposta do assistente. Por favor, tente novamente mais tarde.",
+        variant: "destructive"
+      });
+    } finally {
       setIsLoading(false);
-    }, 800);
-  };
-
-  // Response generation using our knowledge base
-  const generateResponse = (query: string): Message => {
-    const result = findAnswer(query);
-    
-    if (result) {
-      return {
-        role: 'assistant',
-        content: result.answer,
-        options: result.options
-      };
     }
-    
-    // If no direct match, check for follow-up needs
-    if (query.toLowerCase().includes('aposentadoria') && !query.toLowerCase().includes('tipo')) {
-      return {
-        role: 'assistant',
-        content: 'Para falar sobre aposentadoria, precisamos entender qual modalidade é de seu interesse. Existe a aposentadoria por idade, por tempo de contribuição e especial. Sobre qual delas gostaria de saber mais?',
-        options: ['Aposentadoria por idade', 'Aposentadoria por tempo de contribuição', 'Aposentadoria especial']
-      };
-    }
-    
-    // Default responses if no match found
-    const defaultResponses = [
-      "Essa é uma questão interessante sobre direito previdenciário. Para uma orientação personalizada sobre seu caso específico, recomendo entrar em contato com o Dr. Joanyr Araujo pelo telefone (63) 98502-7508 ou através do formulário na seção de contato do site.",
-      "Para responder adequadamente a essa questão, precisaríamos analisar seu caso específico. Por favor, entre em contato com o Dr. Joanyr Araujo através do telefone (63) 98502-7508 ou pelo e-mail joanyraraujo@gmail.com para um atendimento personalizado.",
-      "Sobre esse assunto, seria melhor conversarmos pessoalmente para entender todos os detalhes do seu caso. Você pode agendar uma consulta com o Dr. Joanyr Araujo através do formulário de contato no site ou ligando para (63) 98502-7508."
-    ];
-    
-    return {
-      role: 'assistant',
-      content: defaultResponses[Math.floor(Math.random() * defaultResponses.length)],
-      options: getSuggestions()
-    };
   };
 
   // Function to handle feedback

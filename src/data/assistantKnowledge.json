@@ -1,0 +1,163 @@
+
+{
+  "systemMessage": "Você é um assistente virtual especializado em direito previdenciário, representando o Dr. Joanyr Araujo. Seu tom deve ser técnico e profissional, mas com linguagem clara e didática. Adapte suas respostas de acordo com o nível de linguagem do usuário. Seu objetivo é fornecer informações precisas sobre direito previdenciário de maneira compreensível e sempre encaminhar casos complexos para uma consulta pessoal com o Dr. Joanyr Araujo. Evite dar conselhos jurídicos específicos. Comunique-se de forma empática e acessível.",
+  "knowledgeBase": [
+    {
+      "category": "Geral",
+      "question": "Quem é Joanyr Araujo?",
+      "answer": "Joanyr Araujo é um advogado previdenciarista em Palmas, especialista em Direito Previdenciário com mais de 14 anos de experiência. Ele oferece orientação jurídica especializada em diversas áreas do direito previdenciário, buscando garantir que seus clientes compreendam seus direitos e as opções legais disponíveis."
+    },
+    {
+      "category": "Geral",
+      "question": "Qual a experiência de Joanyr Araujo?",
+      "answer": "Ele possui mais de 14 anos de experiência na área do direito previdenciário, com conhecimento técnico específico e ampla atuação em casos diversos."
+    },
+    {
+      "category": "Geral",
+      "question": "Onde Joanyr Araujo atua?",
+      "answer": "Ele atua em Palmas, Tocantins."
+    },
+    {
+      "category": "Serviços Oferecidos",
+      "question": "Quais serviços Joanyr Araujo oferece?",
+      "answer": "O Dr. Joanyr Araujo oferece orientação jurídica especializada em diversas áreas do direito previdenciário, incluindo:\n- Aposentadorias (por idade, tempo de contribuição e especial)\n- Pensão por Morte\n- Auxílios por incapacidade (auxílio-doença e aposentadoria por invalidez)\n- Benefício assistencial (BPC/LOAS)\n- Revisão de Benefícios\n- Recursos Administrativos e Processos\n\nEle auxilia em todo o processo de solicitação e revisão de benefícios previdenciários.",
+      "options": [
+        "Aposentadorias",
+        "Pensão por Morte",
+        "Auxílios por incapacidade",
+        "BPC/LOAS",
+        "Revisão de Benefícios",
+        "Recursos Administrativos"
+      ]
+    },
+    {
+      "category": "Serviços Oferecidos",
+      "question": "O que é orientação sobre aposentadoria?",
+      "answer": "É a orientação completa sobre os diferentes tipos de aposentadoria, incluindo por idade, tempo de contribuição e especial. O Dr. Joanyr Araujo auxilia na análise dos requisitos necessários, documentação exigida e todo o processo de solicitação junto ao INSS."
+    },
+    {
+      "category": "Serviços Oferecidos",
+      "question": "O que é BPC/LOAS?",
+      "answer": "O Benefício de Prestação Continuada (BPC/LOAS) é um suporte financeiro para idosos com mais de 65 anos ou pessoas com deficiência de qualquer idade que não possuem meios de prover a própria manutenção ou tê-la provida por sua família. É necessário comprovar baixa renda familiar, geralmente inferior a 1/4 do salário mínimo por pessoa."
+    },
+    {
+      "category": "Serviços Oferecidos",
+      "question": "O que são benefícios por incapacidade?",
+      "answer": "São benefícios como auxílio-doença (auxílio por incapacidade temporária) e aposentadoria por invalidez (aposentadoria por incapacidade permanente), destinados a trabalhadores que estão temporária ou permanentemente incapacitados de exercer sua atividade profissional por motivo de doença ou acidente."
+    },
+    {
+      "category": "Serviços Oferecidos",
+      "question": "O que é revisão de benefícios?",
+      "answer": "É a análise e atuação em pedidos de revisão quando os benefícios são calculados ou aplicados de forma incorreta pelo INSS. O Dr. Joanyr Araujo pode avaliar seu benefício atual e verificar se há possibilidade de correção de valores ou critérios utilizados."
+    },
+    {
+      "category": "Serviços Oferecidos",
+      "question": "O que envolve Recursos Administrativos e Processos?",
+      "answer": "É a representação em processos administrativos junto ao INSS e judiciais na Justiça Federal para garantir o reconhecimento dos direitos previdenciários. Isso inclui a elaboração de recursos contra decisões desfavoráveis e o acompanhamento dos processos em todas as instâncias."
+    },
+    {
+      "category": "Serviços Oferecidos",
+      "question": "Quais os tipos de aposentadoria?",
+      "answer": "O Dr. Joanyr Araujo oferece orientação sobre os seguintes tipos de aposentadoria:\n- Aposentadoria por idade: concedida com base na idade mínima do trabalhador\n- Aposentadoria por tempo de contribuição: baseada no tempo de pagamento ao INSS\n- Aposentadoria especial: para trabalhadores expostos a agentes nocivos à saúde\n\nCada tipo possui requisitos específicos que podem variar conforme as regras de transição da Reforma da Previdência.",
+      "options": [
+        "Aposentadoria por idade",
+        "Aposentadoria por tempo de contribuição",
+        "Aposentadoria especial"
+      ]
+    },
+    {
+      "category": "Serviços Oferecidos",
+      "question": "Como faço para dar entrada na aposentadoria?",
+      "answer": "Para dar entrada na aposentadoria, você precisará reunir a documentação necessária (como documentos pessoais, comprovantes de contribuição, etc.) e fazer o requerimento junto ao INSS. Este processo pode ser realizado pelo site ou aplicativo Meu INSS, pelo telefone 135 ou presencialmente em uma agência. Para garantir que todo o processo ocorra da forma correta e que seus direitos sejam respeitados, recomendamos buscar orientação jurídica especializada com o Dr. Joanyr Araujo antes de iniciar o procedimento."
+    },
+    {
+      "category": "Diferenciais",
+      "question": "Quais são os diferenciais do serviço de Joanyr Araujo?",
+      "answer": "Os diferenciais do Dr. Joanyr Araujo incluem:\n- Experiência Profissional: Mais de 14 anos de atuação com conhecimento técnico específico em direito previdenciário.\n- Comunicação Clara: Explicações acessíveis e fáceis de entender sobre conceitos jurídicos complexos.\n- Atendimento Adaptado: Consultas remotas ou presenciais, conforme a necessidade do cliente.\n- Atendimento Individualizado: Análise detalhada de cada caso, considerando suas particularidades.",
+      "options": [
+        "Experiência Profissional",
+        "Comunicação Clara",
+        "Atendimento Adaptado",
+        "Atendimento Individualizado"
+      ]
+    },
+    {
+      "category": "Perguntas Frequentes",
+      "question": "O que fazer quando um benefício é negado pelo INSS?",
+      "answer": "Quando um benefício é negado pelo INSS, existem algumas possibilidades de revisão da decisão:\n- Recurso administrativo junto ao próprio INSS, através de petição dirigida à Junta de Recursos.\n- Ajuizamento de ação na Justiça Federal.\n- Em alguns casos, pode ser viável apresentar um novo requerimento administrativo com documentação complementar.\n\nA estratégia mais adequada dependerá da análise do seu caso específico e dos fundamentos da negativa. Recomendo buscar orientação jurídica para avaliar a melhor opção."
+    },
+    {
+      "category": "Perguntas Frequentes",
+      "question": "Quem tem direito ao benefício do BPC/Loas?",
+      "answer": "O Benefício de Prestação Continuada (BPC/Loas) é destinado a idosos acima de 65 anos ou pessoas com deficiência de qualquer idade que tenham impedimentos de longo prazo (físicos, mentais, intelectuais ou sensoriais) que dificultem sua participação na sociedade. Ambos precisam comprovar baixa renda familiar, geralmente inferior a 1/4 do salário mínimo por pessoa. Em casos específicos, a Justiça pode flexibilizar esse critério após análise das particularidades."
+    },
+    {
+      "category": "Perguntas Frequentes",
+      "question": "Quais condições médicas podem dar direito a benefícios por incapacidade?",
+      "answer": "Diversas condições de saúde podem justificar a concessão de benefícios por incapacidade, como doenças graves, transtornos mentais severos, doenças neurológicas, cardiopatias graves, entre outras. O importante é haver documentação médica que comprove a condição e sua interferência na capacidade laboral. Cada caso é analisado individualmente pela perícia médica do INSS, que avalia se a incapacidade é temporária (auxílio por incapacidade temporária) ou permanente (aposentadoria por incapacidade permanente)."
+    },
+    {
+      "category": "Perguntas Frequentes",
+      "question": "Quais perícias são necessárias nos processos previdenciários?",
+      "answer": "Dependendo do benefício solicitado, podem ser necessárias diferentes tipos de perícias. Para benefícios por incapacidade, a perícia médica é imprescindível. Para o BPC/LOAS, além da perícia médica (em caso de pessoa com deficiência), é realizada uma avaliação social para verificar as condições socioeconômicas. Em processos específicos, podem ser necessárias perícias especializadas para comprovar condições de trabalho ou saúde particulares."
+    },
+    {
+      "category": "Perguntas Frequentes",
+      "question": "Como posso verificar meu tempo de contribuição?",
+      "answer": "Você pode verificar seu tempo de contribuição através do site ou aplicativo Meu INSS, solicitando seu Cadastro Nacional de Informações Sociais (CNIS) ou Extrato Previdenciário. Também é possível obter essas informações presencialmente em uma agência do INSS, mediante agendamento. Para uma análise mais precisa e completa, recomendamos que consulte o Dr. Joanyr Araujo, que pode auxiliar na contagem do tempo de contribuição e avaliar se há períodos que podem ser incluídos através de recursos ou ações específicas."
+    },
+    {
+      "category": "Perguntas Frequentes",
+      "question": "Qual a diferença entre aposentadoria por idade e por tempo de contribuição?",
+      "answer": "A aposentadoria por idade é concedida com base na idade mínima do trabalhador, geralmente 65 anos para homens e 62 anos para mulheres (após a Reforma da Previdência), além de um tempo mínimo de contribuição de 15 anos para mulheres e 20 anos para homens. Já a aposentadoria por tempo de contribuição leva em conta principalmente o período de pagamento ao INSS, mas também considera a idade mínima após a Reforma da Previdência. Cada modalidade possui seus próprios requisitos e regras de cálculo. Para saber qual é mais vantajosa no seu caso, recomendamos uma análise personalizada com o Dr. Joanyr Araujo."
+    },
+    {
+      "category": "Contato",
+      "question": "Como entrar em contato com Joanyr Araujo?",
+      "answer": "Você pode entrar em contato com o Dr. Joanyr Araujo das seguintes formas:\n- Telefone/WhatsApp: (63) 98502-7508\n- E-mail: joanyraraujo@gmail.com\n- Formulário de contato em nosso site\n- Endereço físico em Palmas - TO",
+      "options": [
+        "Telefone",
+        "E-mail",
+        "Endereço",
+        "Horário de atendimento"
+      ]
+    },
+    {
+      "category": "Contato",
+      "question": "Qual o telefone de contato?",
+      "answer": "O telefone para contato é (63) 98502-7508."
+    },
+    {
+      "category": "Contato",
+      "question": "Qual o e-mail de contato?",
+      "answer": "O e-mail para contato é joanyraraujo@gmail.com."
+    },
+    {
+      "category": "Contato",
+      "question": "Qual o endereço do escritório?",
+      "answer": "O endereço é Palmas - TO, 77000-0000. (Endereço completo a ser fornecido)."
+    },
+    {
+      "category": "Contato",
+      "question": "Qual o horário de atendimento?",
+      "answer": "O horário de atendimento é:\n- Segunda a Sexta: 08:00 - 18:00\n- Sábado: 09:00 - 12:00\n- Domingo: Fechado"
+    },
+    {
+      "category": "Reforma da Previdência",
+      "question": "Como a Reforma da Previdência afetou o sistema?",
+      "answer": "A Reforma da Previdência de 2019 (Emenda Constitucional nº 103) trouxe diversas mudanças significativas, como aumento da idade mínima para aposentadoria, novas regras de cálculo de benefícios, alterações nas regras para pensão por morte e regras de transição para quem já estava no sistema. Entre as principais mudanças estão a idade mínima de 65 anos para homens e 62 para mulheres, aumento do tempo mínimo de contribuição para homens (20 anos) mantendo 15 anos para mulheres, e nova fórmula de cálculo que reduziu o valor inicial dos benefícios para muitos segurados."
+    },
+    {
+      "category": "Cálculos e Valores",
+      "question": "Como é calculado o valor da aposentadoria?",
+      "answer": "O cálculo do valor da aposentadoria considera a média aritmética de todos os salários de contribuição desde julho de 1994 (ou desde o início das contribuições, se posterior). Após a Reforma da Previdência, o beneficiário recebe 60% dessa média, com acréscimo de 2% para cada ano que exceder o tempo mínimo de contribuição (15 anos para mulheres e 20 anos para homens). Para atingir 100% da média, a mulher precisa contribuir por 35 anos e o homem por 40 anos. Existem regras de transição para quem já estava no sistema antes da Reforma. O valor está sujeito ao piso (salário mínimo) e ao teto do INSS."
+    },
+    {
+      "category": "Direitos dos Trabalhadores Rurais",
+      "question": "Quais os direitos dos trabalhadores rurais?",
+      "answer": "Os trabalhadores rurais possuem direitos previdenciários diferenciados, como idade mínima reduzida para aposentadoria (60 anos para homens e 55 para mulheres), comprovação de atividade rural em regime de economia familiar (sem necessidade de comprovar contribuições mensais). Para acessar esses direitos, é necessário comprovar o exercício da atividade rural por meio de documentos como contratos de parceria, declaração de sindicato rural, notas de venda de produtos, entre outros. O Dr. Joanyr Araujo tem vasta experiência na defesa dos direitos previdenciários dos trabalhadores rurais."
+    }
+  ],
+  "disclaimerMessage": "Este assistente virtual oferece informações gerais sobre direito previdenciário. Para uma análise completa do seu caso e aconselhamento jurídico específico, é essencial consultar diretamente com o Dr. Joanyr Araujo.",
+  "greetingMessage": "Olá! Sou o assistente virtual do Dr. Joanyr Araujo. Como posso orientá-lo sobre direito previdenciário hoje?"
+}
