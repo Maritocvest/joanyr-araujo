@@ -6,8 +6,21 @@ import { MessageSquare, Send, X } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { getOpenAiAnswer, getSuggestions } from '@/services/openAiService';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import assistantKnowledge from '@/data/assistantKnowledge.json';
+import emailjs from 'emailjs-com';
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type Message = {
   role: 'user' | 'assistant' | 'system';
@@ -15,20 +28,43 @@ type Message = {
   options?: string[];
 };
 
+interface ContactFormData {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  lgpdConsent: boolean;
+}
+
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [showContactForm, setShowContactForm] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const form = useForm<ContactFormData>({
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      message: '',
+      lgpdConsent: false
+    }
+  });
 
   // Disclaimer message
   const disclaimerMessage: Message = {
     role: 'system',
     content: assistantKnowledge.disclaimerMessage
   };
+
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init("vo8bO2b27gn2pgDsP");
+  }, []);
 
   // Initial greeting message
   useEffect(() => {
@@ -49,7 +85,7 @@ const AIAssistant = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]);
+  }, [messages, showContactForm]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -60,6 +96,22 @@ const AIAssistant = () => {
     setIsLoading(true);
     setShowSuggestions(false);
     setInputMessage('');
+    
+    // Check if the message is about contact or form
+    const contactKeywords = ['contato', 'formulário', 'formulario', 'enviar mensagem', 'entrar em contato', 'falar com advogado', 'consulta', 'agendar'];
+    const shouldShowContactForm = contactKeywords.some(keyword => inputMessage.toLowerCase().includes(keyword));
+    
+    if (shouldShowContactForm) {
+      setTimeout(() => {
+        setMessages(prev => [...prev, { 
+          role: 'assistant', 
+          content: 'Para entrarmos em contato, preciso de algumas informações. Por favor, preencha o formulário abaixo:' 
+        }]);
+        setShowContactForm(true);
+        setIsLoading(false);
+      }, 1000);
+      return;
+    }
     
     // Get all the messages except system messages for context
     const conversationHistory = messages.filter(msg => msg.role !== 'system');
@@ -161,6 +213,67 @@ const AIAssistant = () => {
         "Vamos utilizar seu feedback para melhorar nosso assistente.",
       duration: 3000
     });
+  };
+
+  // Handle contact form submission
+  const onSubmitContactForm = async (data: ContactFormData) => {
+    setIsLoading(true);
+    
+    try {
+      const templateParams = {
+        from_name: data.name,
+        from_email: data.email,
+        from_phone: data.phone,
+        message: data.message,
+        to_name: "Joanyr Araújo",
+        reply_to: data.email,
+        lgpd_consent: data.lgpdConsent ? "Sim" : "Não"
+      };
+      
+      await emailjs.send(
+        'service_tsmlkwr',
+        'template_z5lm1l7',
+        templateParams,
+        'vo8bO2b27gn2pgDsP'
+      );
+      
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: `Obrigado, ${data.name}! Suas informações foram enviadas com sucesso. Entraremos em contato em breve através do e-mail ${data.email} ou telefone ${data.phone}.`,
+      }]);
+      
+      toast({
+        title: "Mensagem enviada!",
+        description: "Entraremos em contato em breve.",
+      });
+      
+      setShowContactForm(false);
+      form.reset();
+    } catch (error) {
+      console.error('Error sending email:', error);
+      
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: "Desculpe, tivemos um problema ao enviar suas informações. Por favor, tente novamente mais tarde ou entre em contato diretamente pelo telefone (63) 98502-7508.",
+      }]);
+      
+      toast({
+        title: "Erro ao enviar mensagem",
+        description: "Por favor, tente novamente mais tarde.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const cancelContactForm = () => {
+    setShowContactForm(false);
+    setMessages(prev => [...prev, { 
+      role: 'assistant', 
+      content: "Tudo bem! Se preferir, você pode entrar em contato diretamente pelo telefone (63) 98502-7508 ou pelo e-mail joanyraraujo@gmail.com. Posso ajudar com algo mais?",
+    }]);
+    form.reset();
   };
 
   return (
@@ -295,6 +408,111 @@ const AIAssistant = () => {
                   </div>
                 </div>
               )}
+
+              {/* Contact Form */}
+              {showContactForm && (
+                <div className="bg-white p-4 rounded-lg border border-gray-200 mb-4">
+                  <h4 className="font-semibold text-primary mb-3">Formulário de Contato</h4>
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmitContactForm)} className="space-y-3">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Nome Completo</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Seu nome" {...field} required />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>E-mail</FormLabel>
+                            <FormControl>
+                              <Input type="email" placeholder="seu@email.com" {...field} required />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Telefone/WhatsApp</FormLabel>
+                            <FormControl>
+                              <Input placeholder="(00) 00000-0000" {...field} required />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="message"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Mensagem</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                placeholder="Descreva brevemente sua situação" 
+                                className="min-h-[80px] resize-none"
+                                {...field}
+                                required 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="lgpdConsent"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox 
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                required 
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="text-xs">
+                                Li e concordo com a <a href="/privacidade" className="text-secondary hover:underline" target="_blank">Política de Privacidade</a> e autorizo o uso dos meus dados para contato.
+                              </FormLabel>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      <div className="flex gap-2 pt-2">
+                        <Button 
+                          type="submit" 
+                          className="flex-1"
+                          disabled={isLoading}
+                        >
+                          {isLoading ? 'Enviando...' : 'Enviar'}
+                        </Button>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          onClick={cancelContactForm}
+                          disabled={isLoading}
+                        >
+                          Cancelar
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                </div>
+              )}
               
               {showSuggestions && messages.length <= 2 && (
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -322,11 +540,12 @@ const AIAssistant = () => {
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
+                  disabled={showContactForm}
                 />
                 <Button 
                   className="rounded-l-none h-full" 
                   onClick={handleSendMessage}
-                  disabled={!inputMessage.trim() || isLoading}
+                  disabled={!inputMessage.trim() || isLoading || showContactForm}
                   aria-label="Enviar mensagem"
                 >
                   <Send className="h-4 w-4" />

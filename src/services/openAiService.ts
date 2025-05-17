@@ -1,6 +1,7 @@
 
 // API key is stored outside of this file for security reasons
 import assistantKnowledge from '../data/assistantKnowledge.json';
+import { getEnvVariable } from '../utils/envUtils';
 
 interface OpenAIResponse {
   content: string;
@@ -14,8 +15,8 @@ interface Message {
 
 export const getOpenAiAnswer = async (messages: Message[]): Promise<OpenAIResponse> => {
   try {
-    // Use the API key from environment variable or secure storage
-    const apiKey = 'PLACEHOLDER_FOR_API_KEY'; // This should be replaced with a secure method
+    // Get the API key from the env utils
+    const apiKey = process.env.OPENAI_API_KEY || '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';
     
     // Prepare the full conversation context with system message
     const fullMessages = [
