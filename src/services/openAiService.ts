@@ -1,4 +1,3 @@
-
 // API key is stored outside of this file for security reasons
 import assistantKnowledge from '../data/assistantKnowledge.json';
 import { getEnvVariable } from '../utils/envUtils';
@@ -13,21 +12,48 @@ interface Message {
   content: string;
 }
 
+// Session storage to maintain context between messages
+let sessionData = {
+  userName: '',
+  topic: '',
+  history: [] as Message[]
+};
+
 export const getOpenAiAnswer = async (messages: Message[]): Promise<OpenAIResponse> => {
   try {
     // Get the API key from the env utils
     const apiKey = process.env.OPENAI_API_KEY || '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';
     
-    // Prepare the full conversation context with system message
+    // Store messages in session
+    updateSessionData(messages);
+    
+    // Check for keywords that require special handling
+    const lastUserMessage = messages.filter(msg => msg.role === 'user').pop();
+    let systemPrompt = assistantKnowledge.systemMessage;
+    
+    // Check if the message contains "negado" or "indeferido" keywords
+    if (lastUserMessage && (
+        lastUserMessage.content.toLowerCase().includes('negado') || 
+        lastUserMessage.content.toLowerCase().includes('indeferido')
+    )) {
+      // Add special instruction for denied benefits
+      systemPrompt += "\n\nA/D: o cliente está com benefício negado. Adotar tom de empatia, sugerir próxima etapa (recurso administrativo) e disponibilizar botão 'Como recorrer'.";
+    }
+    
+    // Prepare the full conversation context with personalized system message
     const fullMessages = [
       {
-        role: 'system',
-        content: assistantKnowledge.systemMessage
+        role: 'system' as const,
+        content: `Você é o Dr. Joanyr Araujo, assistente virtual simpático e empático do Dr. Joanyr Araujo, especialista em direito previdenciário. 
+        Utilize tom acolhedor, inclua cumprimentos personalizados, respostas claras e, quando adequado, emojis leves.
+        ${sessionData.userName ? `O nome do usuário é ${sessionData.userName}.` : ''}
+        ${sessionData.topic ? `O usuário está interessado em ${sessionData.topic}.` : ''}
+        ${systemPrompt}`
       },
       ...messages.filter(msg => msg.role !== 'system')
     ];
     
-    // Make a request to OpenAI API
+    // Make a request to OpenAI API with the new parameters
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -35,10 +61,11 @@ export const getOpenAiAnswer = async (messages: Message[]): Promise<OpenAIRespon
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o-mini',
         messages: fullMessages,
-        temperature: 0.7,
-        max_tokens: 500
+        temperature: 0.8,
+        max_tokens: 512,
+        top_p: 0.9
       })
     });
 
@@ -82,6 +109,65 @@ function extractOptionsFromResponse(text: string): string[] | undefined {
   
   return undefined;
 }
+
+// Update session data based on messages
+function updateSessionData(messages: Message[]): void {
+  // Store messages in history
+  sessionData.history = [...messages];
+  
+  // Try to extract user name from messages
+  if (!sessionData.userName) {
+    const namePattern = /(?:me\s+chamo|meu\s+nome\s+[eé]\s+|sou\s+(?:o|a)\s+)([A-Z][a-záàâãéèêíïóôõöúçñ]+)/i;
+    
+    for (const msg of messages) {
+      if (msg.role === 'user') {
+        const match = msg.content.match(namePattern);
+        if (match && match[1]) {
+          sessionData.userName = match[1];
+          break;
+        }
+      }
+    }
+  }
+  
+  // Try to detect topic of interest
+  if (!sessionData.topic) {
+    const topics = {
+      'aposentadoria': ['aposentadoria', 'aposentar', 'tempo de contribuição', 'idade'],
+      'auxílio-doença': ['auxílio', 'doença', 'incapacidade', 'afastamento'],
+      'pensão': ['pensão', 'morte', 'falecimento'],
+      'recurso': ['recurso', 'negado', 'indeferido', 'recorrer'],
+      'BPC/LOAS': ['bpc', 'loas', 'assistencial', 'idoso', 'deficiente']
+    };
+    
+    const lastUserMsg = messages.filter(msg => msg.role === 'user').pop();
+    
+    if (lastUserMsg) {
+      const content = lastUserMsg.content.toLowerCase();
+      
+      for (const [topic, keywords] of Object.entries(topics)) {
+        if (keywords.some(keyword => content.includes(keyword))) {
+          sessionData.topic = topic;
+          break;
+        }
+      }
+    }
+  }
+}
+
+// Function to get session data
+export const getSessionData = () => {
+  return { ...sessionData };
+};
+
+// Function to reset session data
+export const resetSessionData = () => {
+  sessionData = {
+    userName: '',
+    topic: '',
+    history: []
+  };
+};
 
 // Fallback function to get answers from our local knowledge base
 function getLocalAnswer(query: string): OpenAIResponse {
@@ -193,4 +279,23 @@ export const getSuggestions = (category?: string): string[] => {
     .map(qa => qa.question);
     
   return categoryQuestions.length > 0 ? categoryQuestions : getSuggestions();
+};
+
+// Default quick reply options
+export const getDefaultQuickReplies = (): string[] => {
+  return [
+    "Quero saber sobre benefícios",
+    "Como recorrer de um indeferimento",
+    "Falar com um atendente",
+    "Preencher as informações do Formulário de Contato"
+  ];
+};
+
+// Special quick replies for denied benefits
+export const getDeniedBenefitQuickReplies = (): string[] => {
+  return [
+    "Como recorrer de um indeferimento",
+    "Falar com um atendente",
+    "Preencher as informações do Formulário de Contato"
+  ];
 };

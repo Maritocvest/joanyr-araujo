@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare, Send, X } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { getOpenAiAnswer, getSuggestions } from '@/services/openAiService';
+import { getOpenAiAnswer, getSuggestions, getDefaultQuickReplies, getDeniedBenefitQuickReplies, getSessionData, resetSessionData } from '@/services/openAiService';
 import { useToast } from '@/hooks/use-toast';
 import assistantKnowledge from '@/data/assistantKnowledge.json';
 import emailjs from 'emailjs-com';
@@ -43,6 +43,7 @@ const AIAssistant = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [showContactForm, setShowContactForm] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const form = useForm<ContactFormData>({
@@ -66,17 +67,29 @@ const AIAssistant = () => {
     emailjs.init("vo8bO2b27gn2pgDsP");
   }, []);
 
+  // Reset session data when component unmounts
+  useEffect(() => {
+    return () => {
+      resetSessionData();
+    };
+  }, []);
+
   // Initial greeting message
   useEffect(() => {
     if (messages.length === 0) {
-      setMessages([
-        {
-          role: 'assistant',
-          content: assistantKnowledge.greetingMessage,
-          options: getSuggestions()
-        },
-        disclaimerMessage
-      ]);
+      setIsTyping(true);
+      // Simulate typing delay
+      setTimeout(() => {
+        setMessages([
+          {
+            role: 'assistant',
+            content: "Olá! Eu sou o assistente virtual do Dr. Joanyr Araujo. Como posso ajudar você hoje? 😊",
+            options: getDefaultQuickReplies()
+          },
+          disclaimerMessage
+        ]);
+        setIsTyping(false);
+      }, 1500);
     }
   }, []);
 
@@ -85,7 +98,15 @@ const AIAssistant = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, showContactForm]);
+  }, [messages, showContactForm, isTyping]);
+
+  const simulateTyping = (callback: () => void) => {
+    setIsTyping(true);
+    setTimeout(() => {
+      callback();
+      setIsTyping(false);
+    }, 1500); // 1.5 seconds delay
+  };
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -97,19 +118,25 @@ const AIAssistant = () => {
     setShowSuggestions(false);
     setInputMessage('');
     
+    // Check if the message contains keywords related to denied benefits
+    const hasDeniedKeywords = inputMessage.toLowerCase().includes('negado') || 
+                             inputMessage.toLowerCase().includes('indeferido');
+    
     // Check if the message is about contact or form
     const contactKeywords = ['contato', 'formulário', 'formulario', 'enviar mensagem', 'entrar em contato', 'falar com advogado', 'consulta', 'agendar'];
-    const shouldShowContactForm = contactKeywords.some(keyword => inputMessage.toLowerCase().includes(keyword));
+    const shouldShowContactForm = contactKeywords.some(keyword => inputMessage.toLowerCase().includes(keyword)) || 
+                               inputMessage.toLowerCase().includes('preencher as informações do formulário de contato');
     
     if (shouldShowContactForm) {
-      setTimeout(() => {
+      simulateTyping(() => {
         setMessages(prev => [...prev, { 
           role: 'assistant', 
-          content: 'Para entrarmos em contato, preciso de algumas informações. Por favor, preencha o formulário abaixo:' 
+          content: 'Para entrarmos em contato, preciso de algumas informações. Por favor, preencha o formulário abaixo:',
+          options: getDeniedBenefitQuickReplies()
         }]);
         setShowContactForm(true);
         setIsLoading(false);
-      }, 1000);
+      });
       return;
     }
     
@@ -119,20 +146,26 @@ const AIAssistant = () => {
     try {
       // Process response using OpenAI
       const response = await getOpenAiAnswer([...conversationHistory, userMessage]);
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: response.content, 
-        options: response.options 
-      }]);
+      
+      // Simulate typing before showing response
+      simulateTyping(() => {
+        setMessages(prev => [...prev, { 
+          role: 'assistant', 
+          content: response.content, 
+          options: hasDeniedKeywords ? getDeniedBenefitQuickReplies() : getDefaultQuickReplies()
+        }]);
+        setIsLoading(false);
+      });
     } catch (error) {
       console.error('Error getting AI response:', error);
-      toast({
-        title: "Erro na comunicação",
-        description: "Não foi possível obter uma resposta do assistente. Por favor, tente novamente mais tarde.",
-        variant: "destructive"
+      simulateTyping(() => {
+        toast({
+          title: "Erro na comunicação",
+          description: "Não foi possível obter uma resposta do assistente. Por favor, tente novamente mais tarde.",
+          variant: "destructive"
+        });
+        setIsLoading(false);
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -158,24 +191,47 @@ const AIAssistant = () => {
     try {
       // Process response using OpenAI
       const response = await getOpenAiAnswer([...conversationHistory, userMessage]);
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: response.content, 
-        options: response.options 
-      }]);
+      
+      // Simulate typing before showing response
+      simulateTyping(() => {
+        setMessages(prev => [...prev, { 
+          role: 'assistant', 
+          content: response.content, 
+          options: suggestion.toLowerCase().includes('indeferimento') ? 
+            getDeniedBenefitQuickReplies() : getDefaultQuickReplies()
+        }]);
+        setIsLoading(false);
+      });
     } catch (error) {
       console.error('Error getting AI response:', error);
-      toast({
-        title: "Erro na comunicação",
-        description: "Não foi possível obter uma resposta do assistente. Por favor, tente novamente mais tarde.",
-        variant: "destructive"
+      simulateTyping(() => {
+        toast({
+          title: "Erro na comunicação",
+          description: "Não foi possível obter uma resposta do assistente. Por favor, tente novamente mais tarde.",
+          variant: "destructive"
+        });
+        setIsLoading(false);
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleOptionClick = async (option: string) => {
+    // If the option is to fill the contact form
+    if (option.toLowerCase().includes('preencher as informações do formulário')) {
+      simulateTyping(() => {
+        setMessages(prev => [...prev, { 
+          role: 'user', 
+          content: option 
+        }, {
+          role: 'assistant',
+          content: 'Para entrarmos em contato, preciso de algumas informações. Por favor, preencha o formulário abaixo:'
+        }]);
+        setShowContactForm(true);
+        setIsLoading(false);
+      });
+      return;
+    }
+    
     // Add user message
     const userMessage = { role: 'user' as const, content: option };
     setMessages(prev => [...prev, userMessage]);
@@ -187,20 +243,27 @@ const AIAssistant = () => {
     try {
       // Process response using OpenAI
       const response = await getOpenAiAnswer([...conversationHistory, userMessage]);
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: response.content, 
-        options: response.options 
-      }]);
+      
+      // Simulate typing before showing response
+      simulateTyping(() => {
+        setMessages(prev => [...prev, { 
+          role: 'assistant', 
+          content: response.content, 
+          options: option.toLowerCase().includes('indeferimento') ? 
+            getDeniedBenefitQuickReplies() : getDefaultQuickReplies()
+        }]);
+        setIsLoading(false);
+      });
     } catch (error) {
       console.error('Error getting AI response:', error);
-      toast({
-        title: "Erro na comunicação",
-        description: "Não foi possível obter uma resposta do assistente. Por favor, tente novamente mais tarde.",
-        variant: "destructive"
+      simulateTyping(() => {
+        toast({
+          title: "Erro na comunicação",
+          description: "Não foi possível obter uma resposta do assistente. Por favor, tente novamente mais tarde.",
+          variant: "destructive"
+        });
+        setIsLoading(false);
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -237,42 +300,53 @@ const AIAssistant = () => {
         'vo8bO2b27gn2pgDsP'
       );
       
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: `Obrigado, ${data.name}! Suas informações foram enviadas com sucesso. Entraremos em contato em breve através do e-mail ${data.email} ou telefone ${data.phone}.`,
-      }]);
-      
-      toast({
-        title: "Mensagem enviada!",
-        description: "Entraremos em contato em breve.",
+      // Simulate typing before showing response
+      simulateTyping(() => {
+        setMessages(prev => [...prev, { 
+          role: 'assistant', 
+          content: `Obrigado, ${data.name}! Suas informações foram enviadas com sucesso. Entraremos em contato em breve através do e-mail ${data.email} ou telefone ${data.phone}. 😊`,
+          options: getDefaultQuickReplies()
+        }]);
+        
+        toast({
+          title: "Mensagem enviada!",
+          description: "Entraremos em contato em breve.",
+        });
+        
+        setShowContactForm(false);
+        form.reset();
+        setIsLoading(false);
       });
-      
-      setShowContactForm(false);
-      form.reset();
     } catch (error) {
       console.error('Error sending email:', error);
       
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: "Desculpe, tivemos um problema ao enviar suas informações. Por favor, tente novamente mais tarde ou entre em contato diretamente pelo telefone (63) 98502-7508.",
-      }]);
-      
-      toast({
-        title: "Erro ao enviar mensagem",
-        description: "Por favor, tente novamente mais tarde.",
-        variant: "destructive"
+      simulateTyping(() => {
+        setMessages(prev => [...prev, { 
+          role: 'assistant', 
+          content: "Desculpe, tivemos um problema ao enviar suas informações. Por favor, tente novamente mais tarde ou entre em contato diretamente pelo telefone (63) 98502-7508. 😔",
+          options: getDefaultQuickReplies()
+        }]);
+        
+        toast({
+          title: "Erro ao enviar mensagem",
+          description: "Por favor, tente novamente mais tarde.",
+          variant: "destructive"
+        });
+        
+        setIsLoading(false);
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const cancelContactForm = () => {
     setShowContactForm(false);
-    setMessages(prev => [...prev, { 
-      role: 'assistant', 
-      content: "Tudo bem! Se preferir, você pode entrar em contato diretamente pelo telefone (63) 98502-7508 ou pelo e-mail joanyraraujo@gmail.com. Posso ajudar com algo mais?",
-    }]);
+    simulateTyping(() => {
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: "Tudo bem! Se preferir, você pode entrar em contato diretamente pelo telefone (63) 98502-7508 ou pelo e-mail joanyraraujo@gmail.com. Posso ajudar com algo mais? 😊",
+        options: getDefaultQuickReplies()
+      }]);
+    });
     form.reset();
   };
 
@@ -309,8 +383,8 @@ const AIAssistant = () => {
                 <AvatarFallback>JA</AvatarFallback>
               </Avatar>
               <div>
-                <h3 className="font-semibold text-sm">Assistente Virtual</h3>
-                <p className="text-xs text-white/80">Dr. Joanyr Araujo</p>
+                <h3 className="font-semibold text-sm">Dr. Joanyr Araujo</h3>
+                <p className="text-xs text-white/80">Especialista em Direito Previdenciário</p>
               </div>
               <Button 
                 variant="ghost" 
@@ -383,7 +457,7 @@ const AIAssistant = () => {
                         <button
                           key={optionIndex}
                           onClick={() => handleOptionClick(option)}
-                          className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-3 rounded-full transition-colors duration-200"
+                          className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-3 rounded-full transition-colors duration-200 hover:bg-primary/20"
                         >
                           {option}
                         </button>
@@ -393,7 +467,7 @@ const AIAssistant = () => {
                 </div>
               ))}
               
-              {isLoading && (
+              {isLoading || isTyping ? (
                 <div className="flex justify-start mb-4">
                   <Avatar className="h-8 w-8 mr-2">
                     <AvatarImage src="/lovable-uploads/83ddc91a-0121-4408-bfef-623f4b61473f.png" alt="Dr. Joanyr Araujo" />
@@ -407,7 +481,7 @@ const AIAssistant = () => {
                     </div>
                   </div>
                 </div>
-              )}
+              ) : null}
 
               {/* Contact Form */}
               {showContactForm && (
@@ -496,7 +570,7 @@ const AIAssistant = () => {
                         <Button 
                           type="submit" 
                           className="flex-1"
-                          disabled={isLoading}
+                          disabled={isLoading || isTyping}
                         >
                           {isLoading ? 'Enviando...' : 'Enviar'}
                         </Button>
@@ -504,7 +578,7 @@ const AIAssistant = () => {
                           type="button" 
                           variant="outline" 
                           onClick={cancelContactForm}
-                          disabled={isLoading}
+                          disabled={isLoading || isTyping}
                         >
                           Cancelar
                         </Button>
@@ -514,13 +588,13 @@ const AIAssistant = () => {
                 </div>
               )}
               
-              {showSuggestions && messages.length <= 2 && (
+              {showSuggestions && messages.length <= 2 && !isTyping && (
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {getSuggestions().map((suggestion, index) => (
+                  {getDefaultQuickReplies().map((suggestion, index) => (
                     <button
                       key={index}
                       onClick={() => handleSuggestionClick(suggestion)}
-                      className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-3 rounded-full transition-colors duration-200"
+                      className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-3 rounded-full transition-colors duration-200 hover:bg-primary/20"
                     >
                       {suggestion}
                     </button>
@@ -540,12 +614,12 @@ const AIAssistant = () => {
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  disabled={showContactForm}
+                  disabled={showContactForm || isLoading || isTyping}
                 />
                 <Button 
                   className="rounded-l-none h-full" 
                   onClick={handleSendMessage}
-                  disabled={!inputMessage.trim() || isLoading || showContactForm}
+                  disabled={!inputMessage.trim() || isLoading || showContactForm || isTyping}
                   aria-label="Enviar mensagem"
                 >
                   <Send className="h-4 w-4" />
